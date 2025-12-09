@@ -4,6 +4,7 @@ import '../models/malady.dart';
 import '../models/medicament.dart';
 import '../models/consultation.dart';
 import '../models/patient.dart';
+import '../models/gender.dart';
 import '../services/api_service.dart';
 
 class ConsultationProvider with ChangeNotifier {
@@ -11,6 +12,7 @@ class ConsultationProvider with ChangeNotifier {
   List<Medicament> _medicaments = [];
   final List<Consultation> _consultations = [];
   List<Patient> _patients = [];
+  List<Gender> _genders = [];
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -19,6 +21,7 @@ class ConsultationProvider with ChangeNotifier {
   List<Medicament> get medicaments => _medicaments;
   List<Consultation> get consultations => _consultations;
   List<Patient> get patients => _patients;
+  List<Gender> get genders => _genders;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get hasError => _errorMessage != null;
@@ -74,6 +77,18 @@ class ConsultationProvider with ChangeNotifier {
     }
   }
 
+  // Load all genders from database
+  Future<void> loadGenders() async {
+    try {
+      _genders = await ApiService.getGenders();
+      debugPrint('✅ Loaded ${_genders.length} genders');
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Error loading genders: $e');
+      rethrow;
+    }
+  }
+
  
   Future<void> loadConsultations() async {
     try {
@@ -95,6 +110,7 @@ class ConsultationProvider with ChangeNotifier {
       await Future.wait([
         loadMaladies(),
         loadMedicaments(),
+        loadGenders(),
         loadPatients(),
         loadConsultations(),
       ]);
@@ -153,15 +169,19 @@ class ConsultationProvider with ChangeNotifier {
     required String firstName,
     required String lastName,
     required String email,
+    required int age,
+    required String gender,
   }) async {
     try {
       final patient = Patient(
         firstName: firstName,
         lastName: lastName,
         email: email,
+        age: age,
+        gender: gender,
       );
 
-      debugPrint('🔄 Creating patient: $firstName $lastName');
+      debugPrint('🔄 Creating patient: $firstName $lastName $age $gender');
       final newPatient = await ApiService.createPatient(patient);
       
       _patients.add(newPatient);

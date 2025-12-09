@@ -3,6 +3,8 @@ class Patient {
   final String firstName;
   final String lastName;
   final String email;
+  final int age;
+  final String gender;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -11,6 +13,8 @@ class Patient {
     required this.firstName,
     required this.lastName,
     required this.email,
+    required this.age,
+    required this.gender,
     this.createdAt,
     this.updatedAt,
   });
@@ -35,6 +39,8 @@ class Patient {
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
       email: json['email'] ?? '',
+      age: json['age'] ?? 0,
+      gender: json['gender'] ?? '',
       createdAt: json['createdAt'] != null 
           ? DateTime.parse(json['createdAt'])
           : DateTime.now(),
@@ -50,6 +56,8 @@ class Patient {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
+      'age': age,
+      'gender': gender,
     };
     
     if (id != null) data['_id'] = id;
@@ -65,6 +73,8 @@ class Patient {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
+      'age': age,
+      'gender': gender,
       'updatedAt': DateTime.now().toIso8601String(),
     };
   }
@@ -74,6 +84,8 @@ class Patient {
     String? firstName,
     String? lastName,
     String? email,
+    int? age,
+    String? gender,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -82,6 +94,8 @@ class Patient {
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
+      age: age ?? this.age,
+      gender: gender ?? this.gender,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -89,7 +103,7 @@ class Patient {
 
   @override
   String toString() {
-    return 'Patient(id: $id, firstName: $firstName, lastName: $lastName, email: $email)';
+    return 'Patient(id: $id, firstName: $firstName, lastName: $lastName, email: $email, age: $age, gender: $gender)';
   }
 
   @override

@@ -635,6 +635,18 @@ class _AdminScreenState extends State<AdminScreen> {
                                           ),
                                           DataColumn(
                                             label: Text(
+                                              'Age',
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Gender',
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
                                               'Email',
                                               style: TextStyle(fontWeight: FontWeight.bold),
                                             ),
@@ -657,9 +669,13 @@ class _AdminScreenState extends State<AdminScreen> {
                                           // Get patient info
                                           String patientName = 'Unknown';
                                           String patientEmail = '';
+                                          int patientAge = 0;
+                                          String patientGender = '';
                                           if (consultation.patient != null) {
                                             patientName = '${consultation.patient!['firstName']} ${consultation.patient!['lastName']}';
                                             patientEmail = consultation.patient!['email'] ?? '';
+                                            patientAge = consultation.patient!['age'] ?? 0;
+                                            patientGender = consultation.patient!['gender'] ?? '';
                                           }
                                           
                                           // Get malady name
@@ -685,6 +701,15 @@ class _AdminScreenState extends State<AdminScreen> {
                                                 Text(
                                                   patientName,
                                                   style: const TextStyle(fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                              DataCell(Text(patientAge.toString())),
+                                              DataCell(
+                                                Text(
+                                                  patientGender.toUpperCase(),
+                                                  style: TextStyle(
+                                                    color: patientGender == 'male' ? Colors.blue : patientGender == 'female' ? Colors.pink : Colors.grey,
+                                                  ),
                                                 ),
                                               ),
                                               DataCell(Text(patientEmail)),

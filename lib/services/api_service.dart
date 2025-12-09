@@ -4,6 +4,7 @@ import '../models/patient.dart';
 import '../models/malady.dart';
 import '../models/medicament.dart';
 import '../models/consultation.dart';
+import '../models/gender.dart';
 
 class ApiService {
   // static const String baseUrl = 'http://13.214.201.93:3000/api';//omly dd ip becuae inginx route to nodes
@@ -34,14 +35,26 @@ class ApiService {
   static Future<Patient> createPatient(Patient patient) async {
     
     try {
-      print('🔄 ApiService: Creating patient for ${patient.firstName} ${patient.lastName}');
+      print('🔄 ApiService: Creating patient:');
+      print('   firstName: ${patient.firstName}');
+      print('   lastName: ${patient.lastName}');
+      print('   email: ${patient.email}');
+      print('   age: ${patient.age}');
+      print('   gender: ${patient.gender}');
       
       final Map<String, dynamic> patientData = patient.toJson();
-      // Remove null id and timestamps for creation
-      patientData.removeWhere((key, value) => value == null || key == '_id');
+      print('🔄 ApiService: After toJson(), patientData contains:');
+      print('   firstName: ${patientData['firstName']}');
+      print('   lastName: ${patientData['lastName']}');
+      print('   email: ${patientData['email']}');
+      print('   age: ${patientData['age']}');
+      print('   gender: ${patientData['gender']}');
+      
+      // Only remove _id for creation, keep other fields even if null
+      patientData.remove('_id');
       
       print('🔄 ApiService: Sending POST request to $baseUrl/patients');
-      print('🔄 ApiService: Patient data: $patientData');
+      print('🔄 ApiService: Full Patient data JSON: ${json.encode(patientData)}');
 
       final response = await http.post(
         Uri.parse('$baseUrl/patients'),
@@ -358,4 +371,46 @@ class ApiService {
     }
   }
 
+  // Get all genders
+  static Future<List<Gender>> getGenders() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/genders'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        final List<dynamic> gendersData = jsonData['genders'] ?? jsonData;
+        return gendersData.map((json) => Gender.fromJson(json)).toList();
+      } else {
+        final errorData = json.decode(response.body);
+        throw Exception('Failed to load genders: ${errorData['error'] ?? response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error fetching genders: $e');
+    }
+  }
+
+  // Create a new gender
+  static Future<Gender> createGender(Gender gender) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/genders'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(gender.toJson()),
+      );
+
+      if (response.statusCode == 201) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        final genderJson = jsonData['gender'] ?? jsonData;
+        return Gender.fromJson(genderJson);
+      } else {
+        final errorData = json.decode(response.body);
+        throw Exception('Server error (${response.statusCode}): ${errorData['error']}');
+      }
+    } catch (e) {
+      throw Exception('Error creating gender: $e');
+    }
+  }
 }

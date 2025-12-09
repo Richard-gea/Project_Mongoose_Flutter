@@ -1,0 +1,17 @@
+[
+  {
+    "genderName": "male",
+    "displayName": "Male",
+    "description": "Male gender"
+  },
+  {
+    "genderName": "female",
+    "displayName": "Female",
+    "description": "Female gender"
+  },
+  {
+    "genderName": "other",
+    "displayName": "Other",
+    "description": "Other/Non-binary gender"
+  }
+]

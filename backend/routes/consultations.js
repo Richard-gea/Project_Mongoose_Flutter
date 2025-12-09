@@ -6,7 +6,7 @@ const Consultation = require('../models/Consultation');
 router.get('/', async (req, res) => {
   try {
     const consultations = await Consultation.find({ isDeleted: false })
-      .populate('patient_id', 'firstName lastName email')
+      .populate('patient_id', 'firstName lastName email age gender')
       .populate('malady_id', 'maladyName')
       .populate('medicament_id', 'medicamentName')
       .sort({ createdAt: -1 });
@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
       _id: req.params.id, 
       isDeleted: false 
     })
-      .populate('patient_id', 'firstName lastName email')
+      .populate('patient_id', 'firstName lastName email age gender')
       .populate('malady_id', 'maladyName')
       .populate('medicament_id', 'medicamentName');
     
@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
     
     const savedConsultation = await consultation.save();
     const populatedConsultation = await Consultation.findById(savedConsultation._id)
-      .populate('patient_id', 'firstName lastName email')
+      .populate('patient_id', 'firstName lastName email age gender')
       .populate('malady_id', 'maladyName')
       .populate('medicament_id', 'medicamentName');
     

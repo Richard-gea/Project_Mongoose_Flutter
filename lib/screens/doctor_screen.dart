@@ -15,9 +15,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _ageController = TextEditingController();
 
   String? _selectedMaladyId;
   String? _selectedMedicamentId;
+  String? _selectedGender;
   bool _isSubmitting = false;
 
   @override
@@ -36,6 +38,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
+    _ageController.dispose();
 
     super.dispose();
   }
@@ -52,6 +55,16 @@ class _DoctorScreenState extends State<DoctorScreen> {
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    if (_selectedGender == null) {
+      _showErrorDialog('Please select gender');
+      return;
+    }
+
+    if (_ageController.text.trim().isEmpty) {
+      _showErrorDialog('Please enter age');
       return;
     }
 
@@ -78,6 +91,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         email: _emailController.text.trim(),
+        age: int.parse(_ageController.text.trim()),
+        gender: _selectedGender!,
       );
 
       if (patient == null) {
@@ -315,6 +330,66 @@ class _DoctorScreenState extends State<DoctorScreen> {
                                 return 'Please enter a valid email address';
                               }
                               return null; 
+                            },
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Age Field
+                          TextFormField(
+                            controller: _ageController,
+                            decoration: const InputDecoration(
+                              labelText: 'Age',
+                              prefixIcon: Icon(Icons.calendar_today),
+                            ),
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Please enter age';
+                              }
+                              final age = int.tryParse(value.trim());
+                              if (age == null) {
+                                return 'Please enter a valid number';
+                              }
+                              if (age < 0) {
+                                return 'Age cannot be negative';
+                              }
+                              if (age > 150) {
+                                return 'Age cannot exceed 150';
+                              }
+                              return null;
+                            },
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Gender Dropdown
+                          Consumer<ConsultationProvider>(
+                            builder: (context, consultationProvider, child) {
+                              return DropdownButtonFormField<String>(
+                                value: _selectedGender,
+                                decoration: const InputDecoration(
+                                  labelText: 'Gender',
+                                  prefixIcon: Icon(Icons.person),
+                                ),
+                                items: consultationProvider.genders.map((gender) {
+                                  return DropdownMenuItem<String>(
+                                    value: gender.genderName,
+                                    child: Text(gender.displayName),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedGender = value;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please select gender';
+                                  }
+                                  return null;
+                                },
+                              );
                             },
                           ),
                         ],
