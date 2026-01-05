@@ -120,7 +120,6 @@ class _AdminScreenState extends State<AdminScreen> {
 
                               if (success) {
                                 maladyNameController.clear();
-                                ;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Malady added to database!'),
@@ -291,32 +290,32 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(ctx).pop(),
-                  child: const Text("Close"),
-                ),
-                if (existing != null)
-                  ElevatedButton(
-                    onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
+              // actions: [
+              //   TextButton(
+              //     onPressed: () => Navigator.of(ctx).pop(),
+              //     child: const Text("Close"),
+              //   ),
+              //   if (existing != null)
+              //     ElevatedButton(
+              //       onPressed: () {
+              //         if (!formKey.currentState!.validate()) return;
 
-                      final illness = illnessController.text.trim();
-                      final meds = medicamentControllers
-                          .map((c) => c.text.trim())
-                          .where((m) => m.isNotEmpty)
-                          .toList();
+              //         final illness = illnessController.text.trim();
+              //         final meds = medicamentControllers
+              //             .map((c) => c.text.trim())
+              //             .where((m) => m.isNotEmpty)
+              //             .toList();
 
-                      setState(() {
-                        existing.maladyName = illness;
-                        existing.medicaments = meds;
-                      });
+              //         setState(() {
+              //           existing.maladyName = illness;
+              //           existing.medicaments = meds;
+              //         });
 
-                      Navigator.of(ctx).pop();
-                    },
-                    child: const Text("Update"),
-                  ),
-              ],
+              //         Navigator.of(ctx).pop();
+              //       },
+              //       child: const Text("Update"),
+              //     ),
+              // ],
             );
           },
         );
@@ -617,7 +616,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                     scrollDirection: Axis.horizontal,
                                     child: SingleChildScrollView(
                                       child: DataTable(
-                                        headingRowColor: MaterialStateProperty.all(
+                                        headingRowColor: WidgetStateProperty.all(
                                           Colors.blue.shade50,
                                         ),
                                         columns: const [

@@ -351,12 +351,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
                               if (age == null) {
                                 return 'Please enter a valid number';
                               }
-                              if (age < 0) {
-                                return 'Age cannot be negative';
-                              }
-                              if (age > 150) {
-                                return 'Age cannot exceed 150';
-                              }
                               return null;
                             },
                           ),

@@ -7,8 +7,7 @@ import '../models/consultation.dart';
 import '../models/gender.dart';
 
 class ApiService {
-  // static const String baseUrl = 'http://13.214.201.93:3000/api';//omly dd ip becuae inginx route to nodes
-
+ 
   static const String baseUrl = 'http://127.0.0.1:3000/api';
   static Future<List<Patient>> getPatients() async {
     try {
@@ -35,22 +34,11 @@ class ApiService {
   static Future<Patient> createPatient(Patient patient) async {
     
     try {
-      print('🔄 ApiService: Creating patient:');
-      print('   firstName: ${patient.firstName}');
-      print('   lastName: ${patient.lastName}');
-      print('   email: ${patient.email}');
-      print('   age: ${patient.age}');
-      print('   gender: ${patient.gender}');
+     
       
       final Map<String, dynamic> patientData = patient.toJson();
-      print('🔄 ApiService: After toJson(), patientData contains:');
-      print('   firstName: ${patientData['firstName']}');
-      print('   lastName: ${patientData['lastName']}');
-      print('   email: ${patientData['email']}');
-      print('   age: ${patientData['age']}');
-      print('   gender: ${patientData['gender']}');
-      
-      // Only remove _id for creation, keep other fields even if null
+     
+  
       patientData.remove('_id');
       
       print('🔄 ApiService: Sending POST request to $baseUrl/patients');
@@ -67,7 +55,7 @@ class ApiService {
 
       if (response.statusCode == 201) {
         final Map<String, dynamic> jsonData = json.decode(response.body);
-        // The new backend returns the patient in a 'patient' field
+  
         final patientJson = jsonData['patient'] ?? jsonData;
         final newPatient = Patient.fromJson(patientJson);
         print('✅ ApiService: Successfully created patient with ID: ${newPatient.id}');
@@ -75,12 +63,12 @@ class ApiService {
       } else {
         final errorData = json.decode(response.body);
         final errorMsg = errorData['error'] ?? 'Failed to create patient';
-        print('❌ ApiService: Server error (${ response.statusCode}): $errorMsg');
+        print('ApiService: Server error (${ response.statusCode}): $errorMsg');
         throw Exception('Server error (${response.statusCode}): $errorMsg');
       }
     } catch (e, stackTrace) {
-      print('❌ ApiService: Exception in createPatient: $e');
-      print('❌ ApiService: Stack trace: $stackTrace');
+      print('ApiService: Exception in createPatient: $e');
+      print('ApiService: Stack trace: $stackTrace');
       
       if (e.toString().contains('Connection refused') || e.toString().contains('network')) {
         throw Exception('Cannot connect to server. Please check if the backend is running on $baseUrl');

@@ -65,7 +65,7 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.green,
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => AdminScreen()),
+                  MaterialPageRoute(builder: (_) => const AdminScreen()),
                 ),
               ),
             ),
