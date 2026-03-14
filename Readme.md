@@ -1,5 +1,3 @@
-Gemini said
-A professional README.md is your technical business card. For a DevOps project, it shouldn't just say what the app does; it needs to explain how the infrastructure works.
 
 Here is a template designed specifically for your Flutter + MongoDB + AWS pipeline.
 
